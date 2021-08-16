@@ -12,8 +12,8 @@ spec:
     server: https://kubernetes.default.svc
   project: applications
   source:
-    path: mq/environments/prod/overlays
-    repoURL: https://github.com/cloud-native-toolkit/multi-tenancy-gitops-apps.git
+    path: mq/environments/stage/overlays
+    repoURL: https://github.com/cloud-native-toolkit-demos/multi-tenancy-gitops-apps.git
     targetRevision: ocp47-2021-2
   syncPolicy:
     automated:
