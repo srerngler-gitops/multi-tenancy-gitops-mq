@@ -7,7 +7,7 @@ resources:
 #- argocd/operators/ibm-cp4i-operators.yaml
 #- argocd/operators/ibm-datapower-operator.yaml
 #- argocd/operators/ibm-eventstreams-operator.yaml
-- argocd/operators/ibm-mq-operator.yaml
+#- argocd/operators/ibm-mq-operator.yaml
 #- argocd/operators/ibm-opsdashboard-operator.yaml
 #- argocd/operators/ibm-process-mining-operator.yaml
 #- argocd/instances/ibm-process-mining-instance.yaml
