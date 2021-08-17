@@ -16,6 +16,7 @@ resources:
 
 # IBM Foundations / Common Services
 - argocd/operators/ibm-foundations.yaml
+- argocd/instances/ibm-foundational-services-instance.yaml
 - argocd/operators/ibm-automation-foundation-core-operator.yaml
 
 # IBM Entitlement Key Secret for Platform Navigator in tools namespace
@@ -36,11 +37,11 @@ resources:
 # CICD
 #- argocd/operators/grafana-operator.yaml
 #- argocd/instances/grafana-instance.yaml
-#- argocd/instances/artifactory.yaml
+- argocd/instances/artifactory.yaml
 #- argocd/instances/chartmuseum.yaml
 #- argocd/instances/developer-dashboard.yaml
 #- argocd/instances/swaggereditor.yaml
-#- argocd/instances/sonarqube.yaml
+- argocd/instances/sonarqube.yaml
 #- argocd/instances/pact-broker.yaml
 #- argocd/instances/cntk-pipeline-tasks.yaml
 # In OCP 4.7+ we need to install openshift-pipelines and possibly privileged scc to the pipeline serviceaccount
