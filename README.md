@@ -5,12 +5,16 @@ This is a demo gitops git repository for IBM Cloud Paks.
 This demo repo has a default selection to deploy IBM MQ.
 
 ### Prerequisites
-- Install the Github CLI and login https://github.com/cli/cli
+- Install the Github CLI https://github.com/cli/cli
 - Install the OpenShift CLI `oc` latest version 4.7 or 4.8
 - Create a new organization on github https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch
 
 
 ### Setup
+- Log in with the Github CLI 
+    ```bash
+    gh auth login
+    ```
 - Setup a local git directory to clone all the git repositories
     ```bash
     mkdir -p mq-production

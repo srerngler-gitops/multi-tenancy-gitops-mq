@@ -233,7 +233,7 @@ deploy_bootstrap_argocd () {
 
 print_argo_password () {
     echo "Openshift Console UI: $(oc whoami --show-console)"
-    echo "Openshift GitOps UI: $(oc get route -n tools openshift-gitops-server -o template --template='https://{{.spec.host}}')"
+    echo "Openshift GitOps UI: $(oc get route -n tools openshift-gitops-cntk-server -o template --template='https://{{.spec.host}}')"
     echo "Openshift GitOps Password: $(oc extract secrets/openshift-gitops-cntk-cluster --keys=admin.password -n tools --to=-)"
 }
 
