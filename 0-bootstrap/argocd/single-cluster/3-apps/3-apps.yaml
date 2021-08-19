@@ -20,7 +20,7 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: ibm-common-services
     server: https://kubernetes.default.svc
-  - namespace: openshift-gitops
+  - namespace: tools
     server: https://kubernetes.default.svc
   clusterResourceWhitelist:
   - group: "rbac.authorization.k8s.io"
@@ -44,7 +44,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "300"
 spec:
   destination:
-    namespace: openshift-gitops
+    namespace: tools
     server: https://kubernetes.default.svc
   project: applications
   source:
