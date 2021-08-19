@@ -142,12 +142,19 @@ install_argocd () {
     popd
 }
 
-create_argocd_instance () {
+delete_default_argocd_instance () {
+    echo "Delete the default ArgoCD instance"
+    pushd ${OUTPUT_DIR}  
+    oc delete gitopsservice cluster -n openshift-gitops
+    oc delete argocd openshift-gitops -n openshift-gitops
+    popd
+}
+
+create_custom_argocd_instance () {
     echo "Create a custom ArgoCD instance with custom checks"
     pushd ${OUTPUT_DIR}
-    oc new-project tools || true 
-
-    oc apply -f gitops-0-bootstrap-mq/setup/ocp47/argocd-instance/
+    
+    oc apply -f gitops-0-bootstrap-mq/setup/ocp47/argocd-instance/ -n openshift-gitops
     while ! oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n openshift-gitops > /dev/null; do sleep 30; done
     popd
 }
@@ -211,30 +218,30 @@ apply_argocd_git_override_configmap () {
   echo "Applying ${OUTPUT_DIR}/argocd-git-override-configmap.yaml"
   pushd ${OUTPUT_DIR}
 
-  oc apply -n tools -f argocd-git-override-configmap.yaml
+  oc apply -n openshift-gitops -f argocd-git-override-configmap.yaml
 
   popd
 }
 argocd_git_override () {
   echo "Deploying argocd-git-override webhook"
-  oc apply -n tools -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/deployment.yaml
-  oc apply -f https://raw.githubusercontent.com/hollisc/argocd-git-override/main/k8s/webhook.yaml
-  oc label ns tools cntk=experiment --overwrite=true
+  oc apply -n openshift-gitops -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/deployment.yaml
+  oc apply -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/webhook.yaml
+  oc label ns openshift-gitops cntk=experiment --overwrite=true
   sleep 5
-  oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n tools > /dev/null
+  oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n openshift-gitops > /dev/null
 }
 
 deploy_bootstrap_argocd () {
   echo "Deploying top level bootstrap ArgoCD Application for cluster profile ${GITOPS_PROFILE}"
   pushd ${OUTPUT_DIR}
-  oc apply -n tools -f gitops-0-bootstrap-mq/${GITOPS_PROFILE}
+  oc apply -n openshift-gitops -f gitops-0-bootstrap-mq/${GITOPS_PROFILE}
   popd
 }
 
 print_argo_password () {
     echo "Openshift Console UI: $(oc whoami --show-console)"
-    echo "Openshift GitOps UI: $(oc get route -n tools openshift-gitops-cntk-server -o template --template='https://{{.spec.host}}')"
-    echo "Openshift GitOps Password: $(oc extract secrets/openshift-gitops-cntk-cluster --keys=admin.password -n tools --to=-)"
+    echo "Openshift GitOps UI: $(oc get route -n openshift-gitops openshift-gitops-cntk-server -o template --template='https://{{.spec.host}}')"
+    echo "Openshift GitOps Password: $(oc extract secrets/openshift-gitops-cntk-cluster --keys=admin.password -n openshift-gitops --to=-)"
 }
 
 # main
@@ -251,7 +258,9 @@ install_argocd
 
 #patch_argocd
 
-create_argocd_instance
+delete_default_argocd_instance
+
+create_custom_argocd_instance
 
 create_argocd_git_override_configmap
 
