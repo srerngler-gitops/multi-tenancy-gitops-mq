@@ -8,7 +8,7 @@ metadata:
     gitops.tier.group: cntk
 spec:
   destination:
-    namespace: tools
+    namespace: openshift-gitops
     server: https://kubernetes.default.svc
   project: services
   source:
