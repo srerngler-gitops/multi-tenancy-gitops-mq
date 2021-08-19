@@ -142,6 +142,15 @@ install_argocd () {
     popd
 }
 
+create_argocd_instance () {
+    echo "Create a custom ArgoCD instance with custom checks"
+    pushd ${OUTPUT_DIR}
+    oc new-project tools || true 
+
+    oc apply -f gitops-0-bootstrap-mq/setup/ocp47/argocd-instance/
+    while ! oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n openshift-gitops > /dev/null; do sleep 30; done
+}
+
 gen_argocd_patch () {
 echo "Generating argocd instance patch for resourceCustomizations"
 pushd ${OUTPUT_DIR}
@@ -201,30 +210,30 @@ apply_argocd_git_override_configmap () {
   echo "Applying ${OUTPUT_DIR}/argocd-git-override-configmap.yaml"
   pushd ${OUTPUT_DIR}
 
-  oc apply -n openshift-gitops -f argocd-git-override-configmap.yaml
+  oc apply -n tools -f argocd-git-override-configmap.yaml
 
   popd
 }
 argocd_git_override () {
   echo "Deploying argocd-git-override webhook"
-  oc apply -n openshift-gitops -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/deployment.yaml
+  oc apply -n tools -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/deployment.yaml
   oc apply -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/webhook.yaml
   oc label ns openshift-gitops cntk=experiment --overwrite=true
   sleep 5
-  oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n openshift-gitops > /dev/null
+  oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n tools > /dev/null
 }
 
 deploy_bootstrap_argocd () {
   echo "Deploying top level bootstrap ArgoCD Application for cluster profile ${GITOPS_PROFILE}"
   pushd ${OUTPUT_DIR}
-  oc apply -n openshift-gitops -f gitops-0-bootstrap-mq/${GITOPS_PROFILE}
+  oc apply -n tools -f gitops-0-bootstrap-mq/${GITOPS_PROFILE}
   popd
 }
 
 print_argo_password () {
     echo "Openshift Console UI: $(oc whoami --show-console)"
-    echo "Openshift GitOps UI: $(oc get route -n openshift-gitops openshift-gitops-server -o template --template='https://{{.spec.host}}')"
-    echo "Openshift GitOps Password: $(oc extract secrets/openshift-gitops-cluster --keys=admin.password -n openshift-gitops --to=-)"
+    echo "Openshift GitOps UI: $(oc get route -n tools openshift-gitops-server -o template --template='https://{{.spec.host}}')"
+    echo "Openshift GitOps Password: $(oc extract secrets/openshift-gitops-cntk-cluster --keys=admin.password -n tools --to=-)"
 }
 
 # main
@@ -237,9 +246,11 @@ install_pipelines
 
 install_argocd
 
-gen_argocd_patch
+#gen_argocd_patch
 
-patch_argocd
+#patch_argocd
+
+create_argocd_instance
 
 create_argocd_git_override_configmap
 
@@ -247,7 +258,7 @@ apply_argocd_git_override_configmap
 
 argocd_git_override
 
-deploy_bootstrap_argocd
+#deploy_bootstrap_argocd
 
 print_argo_password
 
