@@ -149,6 +149,7 @@ create_argocd_instance () {
 
     oc apply -f gitops-0-bootstrap-mq/setup/ocp47/argocd-instance/
     while ! oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n openshift-gitops > /dev/null; do sleep 30; done
+    popd
 }
 
 gen_argocd_patch () {
