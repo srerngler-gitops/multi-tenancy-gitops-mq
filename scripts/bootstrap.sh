@@ -155,7 +155,7 @@ create_custom_argocd_instance () {
     pushd ${OUTPUT_DIR}
     
     oc apply -f gitops-0-bootstrap-mq/setup/ocp47/argocd-instance/ -n openshift-gitops
-    while ! oc wait pod --timeout=-1s --for=condition=Ready --all -n openshift-gitops > /dev/null; do sleep 30; done
+    while ! oc wait pod --timeout=-1s --for=condition=ContainersReady --all -n openshift-gitops > /dev/null; do sleep 30; done
     popd
 }
 
