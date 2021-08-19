@@ -142,7 +142,7 @@ install_argocd () {
     popd
 }
 
-create_argocd_instance () }
+create_argocd_instance () {
     echo "Create a custom ArgoCD instance with custom checks"
     pushd ${OUTPUT_DIR}
     oc new-project tools || true 
