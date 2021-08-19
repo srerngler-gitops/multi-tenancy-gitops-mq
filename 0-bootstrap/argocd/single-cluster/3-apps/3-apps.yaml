@@ -20,7 +20,7 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: ibm-common-services
     server: https://kubernetes.default.svc
-  - namespace: tools
+  - namespace: openshift-gitops
     server: https://kubernetes.default.svc
   clusterResourceWhitelist:
   - group: "rbac.authorization.k8s.io"
