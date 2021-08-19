@@ -223,4 +223,10 @@ rules:
     apiGroups:
       - operator.ibm.com
     resources:
-      - commonservices      
+      - commonservices
+  - verbs:
+      - '*'
+    apiGroups:
+      - mq.ibm.com
+    resources:
+      - queuemanagers
