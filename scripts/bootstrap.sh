@@ -219,7 +219,7 @@ argocd_git_override () {
   echo "Deploying argocd-git-override webhook"
   oc apply -n tools -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/deployment.yaml
   oc apply -f https://raw.githubusercontent.com/hollisc/argocd-git-override/main/k8s/webhook.yaml
-  oc label ns openshift-gitops cntk=experiment --overwrite=true
+  oc label ns tools cntk=experiment --overwrite=true
   sleep 5
   oc wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n tools > /dev/null
 }
