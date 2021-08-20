@@ -10,8 +10,16 @@ This specific repository focuses on on deploying IBM MQ.
 - Install the OpenShift CLI `oc` (version 4.7 or 4.8)
 - Create a new [GitHub Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch) to use for the demo.
 - Generate a [GitHub Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) with the following scopes
+    - [ ] repo
+        - [x] public_repo
+    - [ ] admin:repo_hook
+        - [x] write:repo_hook
+    <details>
+    <summary> View screen capture of scopes required </summary>
+
     ![GitHub Token Scopes](doc/images/github-webhook.png)
 
+    </details>
 
 
 ### Deploy the IBM MQ operator and its pre-requisites
@@ -43,9 +51,11 @@ This specific repository focuses on on deploying IBM MQ.
 
 
 ### Execute pipelines to deploy a Queue Manager and Spring application to write messages to the queue.
-- Configure the cluster with your GitHub Personal Access Token (PAT), update the `gitops-repo` Configmap which will be used by the pipeline to populate the forked gitops repository and add the `artifactory-access` Secret to the `ci` namespace.
+- Configure the cluster with your GitHub Personal Access Token (PAT), update the `gitops-repo` Configmap which will be used by the pipeline to populate the forked gitops repository and add the `artifactory-access` Secret to the `ci` namespace.  Specify values for the `GIT_USER`, `GIT_TOKEN` and `GIT_ORG` environment variables.
     ```bash
-    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-apps/ocp47-2021-2/scripts/mq-kubeseal.sh | DEBUG=true GIT_USER=<GIT_USER> GIT_TOKEN=<GIT_TOKEN> GIT_ORG=<GIT_ORG> bash ./mq-production/gitops-3-apps/
+    cd mq-production/gitops-3-apps/scripts
+
+    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-apps/ocp47-2021-2/scripts/mq-kubeseal.sh | DEBUG=true GIT_USER=<GIT_USER> GIT_TOKEN=<GIT_TOKEN> GIT_ORG=<GIT_ORG> bash
     ```
 
 - Run a pipeline to build and deploy a Queue Manager
