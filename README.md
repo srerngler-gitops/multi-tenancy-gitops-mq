@@ -27,9 +27,9 @@ This specific repository focuses on on deploying IBM MQ.
 
 - Download [sealed-secrets-ibm-demo-key.yaml](https://bit.ly/demo-sealed-master) and save in the default location `~/Downloads/sealed-secrets-ibm-demo-key.yaml`. You can override the location when running the script with `SEALED_SECRET_KEY_FILE`. Remember do not check this file to git.
 
-- Run the bootstrap script, specify the git org `GITHUB_ORG` and the output directory to clone all repos `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output
+- Run the bootstrap script, specify the git org `GIT_ORG` and the output directory to clone all repos `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output
     ```bash
-    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GITHUB_ORG=<YOUR_GITHUB_ORG> OUTPUT_DIR=mq-production bash
+    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
     ```
 
 - Open the ArgoCD UI from the OpenShift Console, then use `admin` as the username and password should have printed in the previous command
@@ -45,7 +45,7 @@ This specific repository focuses on on deploying IBM MQ.
 ### Execute pipelines to deploy a Queue Manager and Spring application to write messages to the queue.
 - Configure the cluster with your GitHub Personal Access Token (PAT), update the `gitops-repo` Configmap which will be used by the pipeline to populate the forked gitops repository and add the `artifactory-access` Secret to the `ci` namespace.
     ```bash
-    DEBUG=true GIT_USER=<GIT_USER> GIT_TOKEN=<GIT_TOKEN> GIT_ORG=<GIT_ORG> ./mq-production/gitops-3-apps/scripts/mq-kubeseal.sh 
+    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-apps/ocp47-2021-2/scripts/mq-kubeseal.sh | DEBUG=true GIT_USER=<GIT_USER> GIT_TOKEN=<GIT_TOKEN> GIT_ORG=<GIT_ORG> bash ./mq-production/gitops-3-apps/
     ```
 
 - Run a pipeline to build and deploy a Queue Manager
@@ -53,12 +53,14 @@ This specific repository focuses on on deploying IBM MQ.
     - Select Pipelines > Pipelines view in the `ci` namespace. 
     - Click the `mq-infra-dev` pipeline and select Actions > Start.
     - Provide the HTTPS URL for the `mq-infra` repository in your Git Organization.
+    ![Pipeline for mq-infra](doc/images/mq-infra-pipeline.png)
 
 - Run a pipeline to build and deploy a Spring application
     - Log in to the OpenShift Web Console.
     - Select Pipelines > Pipelines view in the `ci` namespace. 
     - Click the `mq-spring-app-dev` pipeline and select Actions > Start.
     - Provide the HTTPS URL for the `mq-spring-app` repository in your Git Organization.
+    ![Pipeline for mq-spring-app](doc/images/mq-spring-app-pipeline.png)
 
 ### References
 - This repository shows the reference architecture for gitops directory structure for more info https://cloudnativetoolkit.dev/learning/gitops-int/gitops-with-cloud-native-toolkit

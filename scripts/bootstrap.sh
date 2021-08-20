@@ -24,18 +24,18 @@ if [[ $OC_VERSION_CHECK -ne 0 ]]; then
 fi
 
 
-if [[ -z ${GITHUB_ORG} ]]; then
+if [[ -z ${GIT_ORG} ]]; then
   echo "We recommend to create a new github organization for all your gitops repos"
   echo "Setup a new organization on github https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch"
-  echo "Please set the environment variable GITHUB_ORG when running the script like:"
-  echo "GITHUB_ORG=acme-org OUTPUT_DIR=gitops-production ./bootstrap.sh"
+  echo "Please set the environment variable GIT_ORG when running the script like:"
+  echo "GIT_ORG=acme-org OUTPUT_DIR=gitops-production ./bootstrap.sh"
 
   exit 1
 fi
 
 if [[ -z ${OUTPUT_DIR} ]]; then
   echo "Please set the environment variable OUTPUT_DIR when running the script like:"
-  echo "GITHUB_ORG=acme-org OUTPUT_DIR=gitops-production ./bootstrap.sh"
+  echo "GIT_ORG=acme-org OUTPUT_DIR=gitops-production ./bootstrap.sh"
 
   exit 1
 fi
@@ -55,88 +55,88 @@ GITOPS_PROFILE=${GITOPS_PROFILE:-0-bootstrap/argocd/single-cluster/bootstrap.yam
 GITOPS_BRANCH=${GITOPS_BRANCH:-ocp47-2021-2}
 
 fork_repos () {
-    echo "Github user/org is ${GITHUB_ORG}"
+    echo "Github user/org is ${GIT_ORG}"
 
     pushd ${OUTPUT_DIR}
 
-    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/multi-tenancy-gitops-mq -q .name || true)
+    GHREPONAME=$(gh api /repos/${GIT_ORG}/multi-tenancy-gitops-mq -q .name || true)
     if [[ ! ${GHREPONAME} = "multi-tenancy-gitops-mq" ]]; then
       echo "Fork not found, creating fork and cloning"
-      gh repo fork cloud-native-toolkit-demos/multi-tenancy-gitops-mq --clone --org ${GITHUB_ORG} --remote
+      gh repo fork cloud-native-toolkit-demos/multi-tenancy-gitops-mq --clone --org ${GIT_ORG} --remote
       mv multi-tenancy-gitops-mq gitops-0-bootstrap-mq
     elif [[ ! -d gitops-0-bootstrap-mq ]]; then
       echo "Fork found, repo not cloned, cloning repo"
-      gh repo clone ${GITHUB_ORG}/multi-tenancy-gitops-mq gitops-0-bootstrap-mq
+      gh repo clone ${GIT_ORG}/multi-tenancy-gitops-mq gitops-0-bootstrap-mq
     fi
     cd gitops-0-bootstrap-mq
     git remote set-url --push upstream no_push
     git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
     cd ..
 
-    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/multi-tenancy-gitops-apps -q .name || true)
+    GHREPONAME=$(gh api /repos/${GIT_ORG}/multi-tenancy-gitops-apps -q .name || true)
     if [[ ! ${GHREPONAME} = "multi-tenancy-gitops-apps" ]]; then
       echo "Fork not found, creating fork and cloning"
-      gh repo fork cloud-native-toolkit-demos/multi-tenancy-gitops-apps --clone --org ${GITHUB_ORG} --remote
+      gh repo fork cloud-native-toolkit-demos/multi-tenancy-gitops-apps --clone --org ${GIT_ORG} --remote
       mv multi-tenancy-gitops-apps gitops-3-apps
     elif [[ ! -d gitops-3-apps ]]; then
       echo "Fork found, repo not cloned, cloning repo"
-      gh repo clone ${GITHUB_ORG}/multi-tenancy-gitops-apps gitops-3-apps
+      gh repo clone ${GIT_ORG}/multi-tenancy-gitops-apps gitops-3-apps
     fi
     cd gitops-3-apps
     git remote set-url --push upstream no_push
     git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
     cd ..
 
-    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/multi-tenancy-gitops-infra -q .name || true)
+    GHREPONAME=$(gh api /repos/${GIT_ORG}/multi-tenancy-gitops-infra -q .name || true)
     if [[ ! ${GHREPONAME} = "multi-tenancy-gitops-infra" ]]; then
       echo "Fork not found, creating fork and cloning"
-      gh repo fork cloud-native-toolkit/multi-tenancy-gitops-infra --clone --org ${GITHUB_ORG} --remote
+      gh repo fork cloud-native-toolkit/multi-tenancy-gitops-infra --clone --org ${GIT_ORG} --remote
       mv multi-tenancy-gitops-infra gitops-1-infra
     elif [[ ! -d gitops-1-infra ]]; then
       echo "Fork found, repo not cloned, cloning repo"
-      gh repo clone ${GITHUB_ORG}/multi-tenancy-gitops-apps gitops-1-infra
+      gh repo clone ${GIT_ORG}/multi-tenancy-gitops-apps gitops-1-infra
     fi
     cd gitops-1-infra
     git remote set-url --push upstream no_push
     git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
     cd ..
 
-    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/multi-tenancy-gitops-services -q .name || true)
+    GHREPONAME=$(gh api /repos/${GIT_ORG}/multi-tenancy-gitops-services -q .name || true)
     if [[ ! ${GHREPONAME} = "multi-tenancy-gitops-services" ]]; then
       echo "Fork not found, creating fork and cloning"
-      gh repo fork cloud-native-toolkit/multi-tenancy-gitops-services --clone --org ${GITHUB_ORG} --remote
+      gh repo fork cloud-native-toolkit/multi-tenancy-gitops-services --clone --org ${GIT_ORG} --remote
       mv multi-tenancy-gitops-services gitops-2-services
     elif [[ ! -d gitops-2-services ]]; then
       echo "Fork found, repo not cloned, cloning repo"
-      gh repo clone ${GITHUB_ORG}/multi-tenancy-gitops-apps gitops-2-services
+      gh repo clone ${GIT_ORG}/multi-tenancy-gitops-apps gitops-2-services
     fi
     cd gitops-2-services
     git remote set-url --push upstream no_push
     git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
     cd ..
 
-    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/mq-infra -q .name || true)
+    GHREPONAME=$(gh api /repos/${GIT_ORG}/mq-infra -q .name || true)
     if [[ ! ${GHREPONAME} = "mq-infra" ]]; then
       echo "Fork not found, creating fork and cloning"
-      gh repo fork cloud-native-toolkit-demos/mq-infra --clone --org ${GITHUB_ORG} --remote
+      gh repo fork cloud-native-toolkit-demos/mq-infra --clone --org ${GIT_ORG} --remote
       mv mq-infra source-mq-infra
     elif [[ ! -d source-mq-infra ]]; then
       echo "Fork found, repo not cloned, cloning repo"
-      gh repo clone ${GITHUB_ORG}/mq-infra source-mq-infra
+      gh repo clone ${GIT_ORG}/mq-infra source-mq-infra
     fi
     cd gitops-3-apps
     git remote set-url --push upstream no_push
     git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
     cd ..
 
-    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/mq-spring-app -q .name || true)
+    GHREPONAME=$(gh api /repos/${GIT_ORG}/mq-spring-app -q .name || true)
     if [[ ! ${GHREPONAME} = "mq-spring-app" ]]; then
       echo "Fork not found, creating fork and cloning"
-      gh repo fork cloud-native-toolkit-demos/mq-spring-app --clone --org ${GITHUB_ORG} --remote
+      gh repo fork cloud-native-toolkit-demos/mq-spring-app --clone --org ${GIT_ORG} --remote
       mv mq-spring-app source-mq-spring-app
     elif [[ ! -d source-mq-spring-app ]]; then
       echo "Fork found, repo not cloned, cloning repo"
-      gh repo clone ${GITHUB_ORG}/mq-spring-app source-mq-spring-app
+      gh repo clone ${GIT_ORG}/mq-spring-app source-mq-spring-app
     fi
     cd source-mq-spring-app
     git remote set-url --push upstream no_push
@@ -226,16 +226,16 @@ data:
   map.yaml: |-
     map:
     - upstreamRepoURL: https://github.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq.git
-      originRepoUrL: https://github.com/${GITHUB_ORG}/multi-tenancy-gitops-mq.git
+      originRepoUrL: https://github.com/${GIT_ORG}/multi-tenancy-gitops-mq.git
       originBranch: ${GITOPS_BRANCH}
     - upstreamRepoURL: https://github.com/cloud-native-toolkit/multi-tenancy-gitops-infra.git
-      originRepoUrL: https://github.com/${GITHUB_ORG}/multi-tenancy-gitops-infra.git
+      originRepoUrL: https://github.com/${GIT_ORG}/multi-tenancy-gitops-infra.git
       originBranch: ${GITOPS_BRANCH}
     - upstreamRepoURL: https://github.com/cloud-native-toolkit/multi-tenancy-gitops-services.git
-      originRepoUrL: https://github.com/${GITHUB_ORG}/multi-tenancy-gitops-services.git
+      originRepoUrL: https://github.com/${GIT_ORG}/multi-tenancy-gitops-services.git
       originBranch: ${GITOPS_BRANCH}
     - upstreamRepoURL: https://github.com/cloud-native-toolkit-demos/multi-tenancy-gitops-apps.git
-      originRepoUrL: https://github.com/${GITHUB_ORG}/multi-tenancy-gitops-apps.git
+      originRepoUrL: https://github.com/${GIT_ORG}/multi-tenancy-gitops-apps.git
       originBranch: ${GITOPS_BRANCH}
 EOF
 
