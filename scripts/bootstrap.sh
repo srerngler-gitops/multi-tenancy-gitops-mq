@@ -115,6 +115,34 @@ fork_repos () {
     git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
     cd ..
 
+    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/mq-infra -q .name || true)
+    if [[ ! ${GHREPONAME} = "mq-infra" ]]; then
+      echo "Fork not found, creating fork and cloning"
+      gh repo fork cloud-native-toolkit-demos/mq-infra --clone --org ${GITHUB_ORG} --remote
+      mv mq-infra source-mq-infra
+    elif [[ ! -d source-mq-infra ]]; then
+      echo "Fork found, repo not cloned, cloning repo"
+      gh repo clone ${GITHUB_ORG}/mq-infra source-mq-infra
+    fi
+    cd gitops-3-apps
+    git remote set-url --push upstream no_push
+    git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
+    cd ..
+
+    GHREPONAME=$(gh api /repos/${GITHUB_ORG}/mq-spring-app -q .name || true)
+    if [[ ! ${GHREPONAME} = "mq-spring-app" ]]; then
+      echo "Fork not found, creating fork and cloning"
+      gh repo fork cloud-native-toolkit-demos/mq-spring-app --clone --org ${GITHUB_ORG} --remote
+      mv mq-spring-app source-mq-spring-app
+    elif [[ ! -d source-mq-spring-app ]]; then
+      echo "Fork found, repo not cloned, cloning repo"
+      gh repo clone ${GITHUB_ORG}/mq-spring-app source-mq-spring-app
+    fi
+    cd source-mq-spring-app
+    git remote set-url --push upstream no_push
+    git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
+    cd ..
+
     popd
 
 }
