@@ -51,7 +51,7 @@ This specific repository focuses on on deploying IBM MQ.
 
 
 ### Execute pipelines to deploy a Queue Manager and Spring application to write messages to the queue.
-- Configure the cluster with your GitHub Personal Access Token (PAT), update the `gitops-repo` Configmap which will be used by the pipeline to populate the forked gitops repository and add the `artifactory-access` Secret to the `ci` namespace.
+- Configure the cluster with your GitHub Personal Access Token (PAT), update the `gitops-repo` Configmap which will be used by the pipeline to populate the forked gitops repository and add the `artifactory-access` Secret to the `ci` namespace.  Specify values for the `GIT_USER`, `GIT_TOKEN` and `GIT_ORG` environment variables.
     ```bash
     cd mq-production/gitops-3-apps/scripts
 
