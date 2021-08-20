@@ -126,7 +126,7 @@ fork_repos () {
     fi
     cd gitops-3-apps
     git remote set-url --push upstream no_push
-    git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
+    git checkout master || git checkout --track origin/master
     cd ..
 
     GHREPONAME=$(gh api /repos/${GIT_ORG}/mq-spring-app -q .name || true)
@@ -140,7 +140,7 @@ fork_repos () {
     fi
     cd source-mq-spring-app
     git remote set-url --push upstream no_push
-    git checkout ${GITOPS_BRANCH} || git checkout --track origin/${GITOPS_BRANCH}
+    git checkout master || git checkout --track origin/master
     cd ..
 
     popd
