@@ -124,7 +124,7 @@ fork_repos () {
       echo "Fork found, repo not cloned, cloning repo"
       gh repo clone ${GIT_ORG}/mq-infra source-mq-infra
     fi
-    cd gitops-3-apps
+    cd source-mq-infra
     git remote set-url --push upstream no_push
     git checkout master || git checkout --track origin/master
     cd ..

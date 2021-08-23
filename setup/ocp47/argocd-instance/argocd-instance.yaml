@@ -165,8 +165,8 @@ spec:
     processors: {}
     resources:
       limits:
-        cpu: '4'
-        memory: 2Gi
+        cpu: '2'
+        memory: 4Gi
       requests:
         cpu: 250m
         memory: 1Gi
