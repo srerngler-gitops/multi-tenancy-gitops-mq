@@ -56,7 +56,7 @@ This specific repository focuses on on deploying IBM MQ.
     code mq-production
     ```
 
-- At this point, you can already demonstrate the value of using a GitOps approach (OpenShift Pipelines) to declaratively deploy the IBM MQ operator and its dependencies.  
+- At this point, you can already demonstrate the value of using a GitOps approach (OpenShift Pipelines) to declaratively deploy the IBM MQ operator and its dependencies.
 
 
 ### Execute pipelines to deploy a Queue Manager and Spring application to write messages to the queue.
@@ -66,6 +66,10 @@ This specific repository focuses on on deploying IBM MQ.
 
     curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-apps/ocp47-2021-2/scripts/mq-kubeseal.sh | DEBUG=true GIT_USER=<GIT_USER> GIT_TOKEN=<GIT_TOKEN> GIT_ORG=<GIT_ORG> bash
     ```
+
+    As this script executes it will issue a `git diff` to allow you to review
+    its customizations.
+    - Type `q` when you're finished examining the changes; the script will continue to completion.
 
 - Run a pipeline to build and deploy a Queue Manager
     - Log in to the OpenShift Web Console.
