@@ -35,6 +35,15 @@ This specific repository focuses on on deploying IBM MQ.
 
 - Download [sealed-secrets-ibm-demo-key.yaml](https://bit.ly/demo-sealed-master) and save in the default location `~/Downloads/sealed-secrets-ibm-demo-key.yaml`. You can override the location when running the script with `SEALED_SECRET_KEY_FILE`. Remember do not check this file to git.
 
+- Log into your OCP cluster, substituting the `--token` and `--server`
+  parameters with your values:
+
+  ```bash
+  oc login --token=<token> --server=<server>
+  ```
+
+  If you are unsure of these values, click your user ID in the OpenShift web console and select `Copy login command`.
+
 - Run the bootstrap script, specify the git org `GIT_ORG` and the output directory to clone all repos `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output
     ```bash
     curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
