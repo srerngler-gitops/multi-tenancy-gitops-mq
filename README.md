@@ -6,8 +6,9 @@ This specific repository focuses on on deploying IBM MQ.
 
 
 ### Prerequisites
-- Install the [Github CLI](https://github.com/cli/cli)
+- Install the [Github CLI](https://github.com/cli/cli) (version 1.14.0+)
 - Install the OpenShift CLI `oc` (version 4.7 or 4.8)
+- Install the [kubeseal CLI](https://github.com/bitnami-labs/sealed-secrets#homebrew) 
 - Create a new [GitHub Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch) to use for the demo.
 - Generate a [GitHub Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) with the following scopes
     - [ ] repo
