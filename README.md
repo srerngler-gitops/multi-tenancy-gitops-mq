@@ -44,7 +44,7 @@ This specific repository focuses on on deploying IBM MQ.
 
   If you are unsure of these values, click your user ID in the OpenShift web console and select `Copy login command`.
 
-- Run the bootstrap script, specify the git org `GIT_ORG` and the output directory to clone all repos `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output
+- Run the bootstrap script, specify the git org `GIT_ORG` and the output directory to clone all repos `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output.  Note, the deployment of all selected resources will take 30 - 45 minutes.  
     ```bash
     curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
     ```
@@ -56,10 +56,18 @@ This specific repository focuses on on deploying IBM MQ.
     code mq-production
     ```
 
-- At this point, you can already demonstrate the value of using a GitOps approach (OpenShift Pipelines) to declaratively deploy the IBM MQ operator and its dependencies.
+- At this point, you can already demonstrate the value of using a GitOps approach (OpenShift Pipelines) to declaratively deploy the IBM MQ operator and its dependencies.  
 
 
 ### Execute pipelines to deploy a Queue Manager and Spring application to write messages to the queue.
+- Before running the pipelines, verify the Platform Navigator and Common Services instances have been deployed successfully.
+    ```bash
+    oc get commonservice common-service -n ibm-common-services -o=jsonpath='{.status.phase}'
+    # Expected output = Succeeded
+
+    oc get platformnavigator -n tools -o=jsonpath='{ .items[*].status.conditions[].status }'
+    # Expected output = True
+    ```
 - Configure the cluster with your GitHub Personal Access Token (PAT), update the `gitops-repo` Configmap which will be used by the pipeline to populate the forked gitops repository and add the `artifactory-access` Secret to the `ci` namespace.  Specify values for the `GIT_USER`, `GIT_TOKEN` and `GIT_ORG` environment variables.
     ```bash
     cd mq-production/gitops-3-apps/scripts
