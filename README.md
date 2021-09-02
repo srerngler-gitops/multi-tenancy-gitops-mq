@@ -51,6 +51,7 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
 - Run the bootstrap script, specifying the new Git org you created above `GIT_ORG` and the new output directory to clone all repos to `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output.
 
 **Note, the deployment of all selected resources will take 30 - 45 minutes**.
+
     ```bash
     curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
     ```
@@ -120,6 +121,7 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
     - Click Start
 
     **Note, the pipeline will take several minutes to complete as it builds and tests the queue manager ready for deployment**
+
     ![Pipeline for mq-infra](doc/images/mq-infra-pipeline.png)
 
 - Run a pipeline to build and deploy a Spring application to the `dev` namespace
