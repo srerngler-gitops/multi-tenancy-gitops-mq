@@ -130,6 +130,7 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
     - Click the `mq-spring-app-dev` pipeline and select Actions > Start.
     - Provide the HTTPS URL for the `mq-spring-app` repository in your Git Organization.
     - Click Start.
+
     ![Pipeline for mq-spring-app](doc/images/mq-spring-app-pipeline.png)
 
 - The pipelines will take a few minutes to complete all tasks. Once complete you should see both pipelines have a status of `succeeded`.
