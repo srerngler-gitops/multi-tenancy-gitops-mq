@@ -35,7 +35,9 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
     mkdir -p mq-production
     ```
 
-- Download [sealed-secrets-ibm-demo-key.yaml](https://bit.ly/demo-sealed-master) and save in the default location `~/Downloads/sealed-secrets-ibm-demo-key.yaml`. You can override the location when running the script with `SEALED_SECRET_KEY_FILE`. **Do not check this file in to Git as it contains a private key!**.
+- Download [sealed-secrets-ibm-demo-key.yaml](https://bit.ly/demo-sealed-master) and save in the default location `~/Downloads/sealed-secrets-ibm-demo-key.yaml`. You can override the location when running the script with `SEALED_SECRET_KEY_FILE`.
+
+**Do not check this file in to Git as it contains a private key!**.
 
 - Log into your OCP cluster, substituting the `--token` and `--server`
   parameters with your values:
@@ -47,6 +49,7 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
   If you are unsure of these values, click your user ID in the OpenShift web console and select `Copy login command`.
 
 - Run the bootstrap script, specifying the new Git org you created above `GIT_ORG` and the new output directory to clone all repos to `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output.
+
 **Note, the deployment of all selected resources will take 30 - 45 minutes**.
     ```bash
     curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
@@ -115,6 +118,7 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
     - Click the `mq-infra-dev` pipeline and select Actions > Start.
     - Provide the HTTPS URL for the `mq-infra` repository in your Git Organization.
     - Click Start
+
     **Note, the pipeline will take several minutes to complete as it builds and tests the queue manager ready for deployment**
     ![Pipeline for mq-infra](doc/images/mq-infra-pipeline.png)
 
