@@ -49,12 +49,10 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
   If you are unsure of these values, click your user ID in the OpenShift web console and select `Copy login command`.
 
 - Run the bootstrap script, specifying the new Git org you created above `GIT_ORG` and the new output directory to clone all repos to `OUTPUT_DIR`. You can use `DEBUG=true` for verbose output.
-
-**Note, the deployment of all selected resources will take 30 - 45 minutes**.
-
-    ```bash
-    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
-    ```
+  **Note, the deployment of all selected resources will take 30 - 45 minutes**.
+  ```bash
+  curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit-demos/multi-tenancy-gitops-mq/ocp47-2021-2/scripts/bootstrap.sh | DEBUG=true GIT_ORG=<YOUR_GIT_ORG> OUTPUT_DIR=mq-production bash
+  ```
 
 - Open the ArgoCD UI from the OpenShift Console (the URL is also printed by the previous command), then use `admin` as the username and password which also was printed by the previous command
 
@@ -113,7 +111,7 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
     - Finally we need to wait for ArgoCD to synchronise these changes. If you like you can go back to the ArgoCD console and manually synchronise all the apps by clicking the `SYNC APPS` button in the top left of the console and selecting `ALL` apps before clicking `SYNC`.
     - After synchronisation is complete, you will see some applications in ArgoCD have the status `Unknown`. This is to be expected at this stage and is resolved as we start to run the pipelines.
 
-- Run a pipeline to build and deploy a Queue Manager to the `dev` namespace
+- Run a pipeline to build and deploy a queue manager to the `dev` namespace
     - Log in to the OpenShift Web Console.
     - Select `Pipelines > Pipelines` view in the `ci` namespace.
     - Click the `mq-infra-dev` pipeline and select Actions > Start.
@@ -136,8 +134,52 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
 - The pipelines will take a few minutes to complete all tasks. Once complete you should see both pipelines have a status of `succeeded`.
 ![Pipeline for mq-spring-app](doc/images/pipelines-complete.png)
 
-- Both the Queue Manager and spring application instances are running in the `dev` namespace. You can review both of these by viewing `pods` in the `dev` namespace.
+- Both the queue manager and spring application instances are running in the `dev` namespace. You can review both of these by viewing `pods` in the `dev` namespace.
 ![Pipeline for mq-spring-app](doc/images/qm-and-app-pods.png)
+
+- The Platform Navigator console has been installed as part of the IBM Cloud Pak for Integration. We use the Platform Navigator to view our queue manager and its queues. The Spring application includes a Swagger interface which we can use to call methods on the Spring application. In the next few steps we will use these to interact with both the queue manager and Spring application.
+
+- The Platform Navigator instance runs in the `tools` namespace.
+    - Run the following `oc` command to display the URL for the Platform Navigator console:
+    ```bash
+    oc get route integration-navigator-pn -n tools
+    ```
+    - Copy the URL from the `HOST/PORT` column and paste into a browser, prefixed with `https://`.
+    - Next find the secret for the Platform Navigator that contains the logon password. The secret resides in the `dev` namespace:
+    ```bash
+    oc get secret ibm-iam-bindinfo-platform-auth-idp-credentials -n dev -o yaml
+    ```
+    - The password is base64 encoded. This needs to be decoded, for example:
+    ```bash
+    echo "<value of admin_password>" | base64 -d
+    ```
+    - Enter 'admin` for the Username field and the output from the base64 commmand for the Password field.
+    - You have now successfully logged into the Platform Navigator console.
+    - You can view the queue manager created by the GitOps process.
+    - Select the `Messaging` tile in the middle of the homepage to take us to the messaging view:
+    ![Pipeline for mq-spring-app](doc/images/platform-navigator-qm-link.png)
+    - Select our queue manager `QM1` by selecting this tile:
+    ![Pipeline for mq-spring-app](doc/images/qm1.png)
+    - Details of the queues can now been seen for our queue manager. Selecting a queue will display further details where you can view the content of messages on the queue.
+    ![Pipeline for mq-spring-app](doc/images/qm1-detail.png)
+
+- The Spring application runs in the `dev` namespace.
+    - Run the following `oc` command to display the URL for the Spring application Swagger interface:
+    ```bash
+    oc get route mq-spring-app -n dev
+    ```
+    - Copy the URL from the `HOST/PORT` column and paste into a browser, prefixed with `https://`.
+    ![Pipeline for mq-spring-app](doc/images/swagger-homepage.png)
+    - Click on `mq-client-controller` where you will see the following 3 endpoints:
+        - GET /api/recv
+        - GET /api/send-hello-world
+        - POST /api/send-json
+    - Click `POST /api/send-hello-world` followed by `Try it out` followed by `Execute`. This will call the Spring application which in turn will put a `Hello World!` message on the queue `IBM.DEMO.Q` of queue manager `QM1`.
+    - From the Platform Navigator console, select this queue followed by the message to display the message details.
+    - Now click `POST /api/recv` followed by `Try it out` followed by `Execute`. This will call the Spring application which in turn will get the `Hello World!` message from the queue.
+    - From the Platform Navigator console, refresh this queue to see the message was got by the Spring application.
+
+- **Congratulation!** You have now successfully installed IBM MQ as part of the IBM Cloud Pak for Integration, and a Spring application using a fully automated GitOps process. You have also been able to view the queue manager using the Platform Navigator console and call methods on the Spring application.
 
 ### References
 - This repository shows the reference architecture for GitOps directory structure for more info https://cloudnativetoolkit.dev/learning/gitops-int/gitops-with-cloud-native-toolkit
