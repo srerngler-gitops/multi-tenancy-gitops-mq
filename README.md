@@ -157,11 +157,13 @@ This specific repository focuses on deploying IBM MQ from the IBM Cloud Pak for 
     - You have now successfully logged into the Platform Navigator console.
     - You can view the queue manager created by the GitOps process.
     - Select the `Messaging` tile in the middle of the homepage to take us to the messaging view:
+
     ![Pipeline for mq-spring-app](doc/images/platform-navigator-qm-link.png)
     - Select our queue manager `QM1` by selecting this tile:
 
     ![Pipeline for mq-spring-app](doc/images/qm1.png)
     - Details of the queues can now been seen for our queue manager. Selecting a queue will display further details where you can view the content of messages on the queue.
+
     ![Pipeline for mq-spring-app](doc/images/qm1-detail.png)
 
 - The Spring application runs in the `dev` namespace.
