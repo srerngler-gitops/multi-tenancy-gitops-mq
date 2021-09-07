@@ -176,7 +176,6 @@ delete_default_argocd_instance () {
     echo "Delete the default ArgoCD instance"
     pushd ${OUTPUT_DIR}
     oc delete gitopsservice cluster -n openshift-gitops
-    oc delete argocd openshift-gitops -n openshift-gitops
     popd
 }
 
