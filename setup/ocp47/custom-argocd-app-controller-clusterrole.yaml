@@ -57,6 +57,7 @@ rules:
       - 'cert-manager.io'
     resources:
       - clusterissuers
+      - certificates
   - verbs:
       - '*'
     apiGroups:
