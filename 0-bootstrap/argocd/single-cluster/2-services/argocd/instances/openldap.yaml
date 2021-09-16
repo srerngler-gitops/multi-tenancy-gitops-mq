@@ -40,13 +40,13 @@ spec:
             Cpu: "512m"
             Memory: "200Mi"
 
-            Domain: "local.io"
+            Domain: "ibm.com"
             AdminPassword: "admin"
             Https: "false"
             SeedUsers:
-              usergroup: "users"
-              userlist: "user1,user2,user3,user4"
-              initialPassword: "redhat"
+              usergroup: "apps"
+              userlist: "app,springapp,quarkusapp,mqapp"
+              initialPassword: "app"
 
           PhpLdapAdmin:
             Image: "docker.io/osixia/phpldapadmin"
